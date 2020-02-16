@@ -21,6 +21,7 @@ public:
         orig = p.scaled(iconSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
         setText("");
         expanded = false;
+        setMinimumHeight(30);
 
         anim = new QVariantAnimation(this);
         anim->setDuration(300);
@@ -39,15 +40,43 @@ public:
             anim->start();
         });
 
+        opacityAnim = new QVariantAnimation(this);
+        opacityAnim->setDuration(300);
 
+        connect(opacityAnim, &QVariantAnimation::valueChanged, this, [=] (const QVariant value) {
+            _opacity = value.toReal();
+            update();
+        });
+
+        _opacity = 0.3;
     }
 protected:
 
+    bool event(QEvent *event) override
+    {
+        qDebug()<< event->type();
+        switch (event->type()) {
+        case QEvent::Enter:
+
+            opacityAnim->setStartValue(0.3);
+            opacityAnim->setEndValue(1.0);
+            opacityAnim->start();
+            break;
+        case QEvent::Leave:
+            opacityAnim->setStartValue(1.0);
+            opacityAnim->setEndValue(0.3);
+            opacityAnim->start();
+            break;
+        }
+
+        return QPushButton::event(event);
+    }
 
     void paintEvent(QPaintEvent *ev) override
     {
         QPushButton::paintEvent(ev);
         QPainter painter(this);
+        painter.setOpacity(_opacity);
 
         //QPainter icon(&pixmap);
         //icon.setCompositionMode(QPainter::CompositionMode_SourceIn);
@@ -63,6 +92,8 @@ private:
     QPixmap orig;
     QPixmap pixmap;
     QVariantAnimation *anim;
+    QVariantAnimation *opacityAnim;
+    qreal _opacity;
     bool expanded;
 };
 
