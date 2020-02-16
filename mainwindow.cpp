@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "card.h"
 #include "form.h"
+#include "expandingcard.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -9,19 +10,16 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 
     ui->setupUi(this);
-
-    for(int i =0; i<3; i++)
-        for(int j = 0; j < 3; j++)
-    {
-        ContainerWidget *base = new ContainerWidget;
-        base->setGraphicsEffect(new QGraphicsBlurEffect);
-        Form *overlay = new Form(base, this);
-        overlay->setObjectName(QString("Card %1 %2").arg(i).arg(j));
-        ui->gridLayout->addWidget(base, i,j );
-    }
+    ExpandingCard *card = new ExpandingCard();
+    ui->gridLayout->addWidget(card);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+
 }

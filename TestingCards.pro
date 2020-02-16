@@ -27,18 +27,24 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    form.cpp
+    form.cpp \
+    expandingcard.cpp
 
 HEADERS += \
         mainwindow.h \
     card.h \
-    form.h
+    form.h \
+    expandingcard.h
 
 FORMS += \
         mainwindow.ui \
-    form.ui
+    form.ui \
+    expandingcard.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    res.qrc
